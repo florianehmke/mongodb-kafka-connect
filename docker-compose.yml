@@ -33,3 +33,21 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9093
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.4
+    environment:
+      - MONGO_INITDB_DATABASE=auth
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - '27017:27017'
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_URL="mongodb://admin:pass@mongo:27017"
+    ports:
+      - '8081:8081'
