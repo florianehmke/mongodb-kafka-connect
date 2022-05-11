@@ -9,4 +9,4 @@ FROM cricketeerone/apache-kafka-connect:latest-confluent-hub
 #    --component-dir /app/libs --worker-configs /app/resources/connect-distributed.properties \
 #    mongodb/kafka-connect-mongodb:1.7.0
 
-COPY mongo-kafka-connect-1.7.0-all.jar /app/libs/
+COPY connect/mongo-kafka-connect-1.7.0-all.jar /app/libs/
