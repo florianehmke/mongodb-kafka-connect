@@ -1,0 +1,2 @@
+FROM mongo:4.4
+COPY mongo/config-replica.js mongo/config-data.js /
