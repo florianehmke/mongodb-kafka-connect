@@ -1,2 +1,3 @@
 FROM mongo:4.4
+RUN apt-get update && apt-get -y install curl
 COPY mongo/config-replica.js mongo/config-data.js mongo/setup.sh /

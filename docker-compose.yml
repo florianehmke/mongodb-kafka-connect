@@ -18,8 +18,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-    depends_on:
-      - zookeeper
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
@@ -29,9 +27,6 @@ services:
     image: provectuslabs/kafka-ui:latest
     ports:
       - "8080:8080"
-    depends_on:
-      - zookeeper
-      - kafka
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
@@ -49,17 +44,12 @@ services:
   mongo1-setup:
     image: "custom/mongo:latest"
     container_name: mongo1-setup
-    depends_on:
-      - mongo1
     entrypoint: ["bash", "-c", "/setup.sh"]
     restart: "no"
 
   mongo1-express:
     container_name: mongo1-express
     image: mongo-express
-    depends_on:
-      - mongo1
-      - mongo1-setup
     environment:
       - ME_CONFIG_MONGODB_URL="mongodb://mongo1:27017"
     ports:
@@ -72,9 +62,6 @@ services:
       dockerfile: Dockerfile-connect
     hostname: connect
     container_name: connect
-    depends_on:
-      - zookeeper
-      - kafka
     environment:
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
       CONNECT_BOOTSTRAP_SERVERS: "kafka:9092"
@@ -105,10 +92,4 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-connect-setup
-    depends_on:
-      - zookeeper
-      - kafka
-      - connect
-      - mongo1
-      - mongo1-setup
     command: bash -c "./initialize-container.sh; tail -f /dev/null"

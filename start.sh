@@ -1,9 +1,19 @@
 #!/bin/bash
-docker-compose up -d mongo1-setup
-sleep 15
 
-docker-compose up -d kafka
-sleep 15
+MONGO_HOST="127.0.0.1:27017"
 
-docker-compose up -d connect-setup
-docker-compose up -d mongo1-express kafka-ui
+waitForPort() {
+  while ! curl --output /dev/null --silent "$1"; do sleep 1 && echo -n .; done
+}
+
+docker-compose up -d mongo1
+waitForPort "$MONGO_HOST"
+
+docker-compose up -d \
+  mongo1-express \
+  mongo1-setup \
+  kafka \
+  kafka-ui \
+  zookeeper \
+  connect \
+  connect-setup
