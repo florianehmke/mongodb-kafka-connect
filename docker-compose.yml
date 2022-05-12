@@ -18,6 +18,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
@@ -41,18 +43,15 @@ services:
       context: .
       dockerfile: Dockerfile-mongo
     command: --replSet rs0
+    ports:
+      - "27017:27017"
 
   mongo1-setup:
     image: "custom/mongo:latest"
     container_name: mongo1-setup
     depends_on:
       - mongo1
-    entrypoint:
-      [
-        "bash",
-        "-c",
-        "sleep 10 && mongo --host mongodb://mongo1:27017 config-replica.js && sleep 10 && mongo --host mongodb://mongo1:27017 config-data.js",
-      ]
+    entrypoint: ["bash", "-c", "/setup.sh"]
     restart: "no"
 
   mongo1-express:
@@ -100,15 +99,16 @@ services:
       CONNECT_OFFSET_FLUSH_INTERVAL_MS: 900000
       CONNECT_CONSUMER_MAX_POLL_RECORDS: 500
 
-  shell:
-    image: custom/mongo-shell:latest
-    container_name: shell
+  connect-setup:
+    image: custom/connect-setup:latest
+    container_name: connect-setup
     build:
       context: .
-      dockerfile: Dockerfile-shell
+      dockerfile: Dockerfile-connect-setup
     depends_on:
       - zookeeper
       - kafka
       - connect
       - mongo1
-    command: bash -c "./initialize-container.sh ; tail -f /dev/null"
+      - mongo1-setup
+    command: bash -c "./initialize-container.sh; tail -f /dev/null"

@@ -3,10 +3,6 @@
 #
 # This one is for arm64..
 # https://github.com/OneCricketeer/apache-kafka-connect-docker
-FROM cricketeerone/apache-kafka-connect:latest-confluent-hub
-
-#RUN confluent-hub install --no-prompt \
-#    --component-dir /app/libs --worker-configs /app/resources/connect-distributed.properties \
-#    mongodb/kafka-connect-mongodb:1.7.0
+FROM cricketeerone/apache-kafka-connect:latest
 
 COPY connect/mongo-kafka-connect-1.7.0-all.jar /app/libs/

@@ -1,0 +1,11 @@
+{
+  "name": "mongo-sink-cdc",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "connection.uri": "mongodb://mongo1:27017",
+    "change.data.capture.handler": "com.mongodb.kafka.connect.sink.cdc.mongodb.ChangeStreamHandler",
+    "database": "kafka-connect-test",
+    "collection": "sink-cdc",
+    "topics": "kafka-connect-test.source"
+  }
+}
