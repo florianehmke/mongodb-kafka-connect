@@ -3,7 +3,7 @@
 MONGO_HOST="127.0.0.1:27017"
 
 waitForPort() {
-  while ! curl --output /dev/null --silent "$1"; do sleep 1 && echo -n .; done
+  while ! curl --output /dev/null --silent "$1"; do sleep 3 && echo -n .; done && sleep 3
 }
 
 docker-compose up -d mongo1

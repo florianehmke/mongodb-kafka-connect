@@ -1,7 +1,8 @@
 #
 # FROM confluentinc/cp-kafka-connect:latest
 #
-# This one is for arm64..
+# The confluent image uses a jdk distribution that is problematic on arm64.
+# This image can be rebuilt on arm64 without problems as it used openjdk11.
 # https://github.com/OneCricketeer/apache-kafka-connect-docker
 FROM cricketeerone/apache-kafka-connect:latest
 
