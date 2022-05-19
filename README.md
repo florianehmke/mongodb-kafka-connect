@@ -1,4 +1,4 @@
-# kafka-connect-mongodb
+# mongodb-kafka-connect
 
 Slightly modified version of the official MongoDB Kafka Connector tutorial which can be found [here](https://www.mongodb.com/docs/kafka-connector/v1.7/tutorials/replicate-with-cdc/).
 
